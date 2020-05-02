@@ -1,6 +1,7 @@
 
 
 var avatars = [];
+var last_attr = "";
 
 //add Avatar when user enters the app
 function createAvatar (id, rec) {	
@@ -102,26 +103,9 @@ function updateAvatar(id, attr) {
     avatar.setAttribute('rotation', rotation);
   }
 
-var x = 0; //Math.random() * (10 - (-10)) + (-10);
-var y = 0; 
-var z = 0; 
-var initialPosition = {x: x, y: y, z: z};
 
-var myBoxColor = '#aaa'
 
-createAvatar('d',{
-    type: 'a-box',
-    attr: {
-        position: initialPosition,
-        rotation: "0 0 0",
-        color: myBoxColor,
-        id: 'd',
-        depth: "1",
-        height: "1",
-        width: "1"
-    }
-});
-
+/*
 var g = 180;
 function drehen()
 {
@@ -131,25 +115,99 @@ function drehen()
     window.setTimeout(drehen, 200);
 }
 drehen();
+*/
+
+const uuid = PubNub.generateUUID();
+const pubnub = new PubNub({
+    publishKey: "pub-c-f3ce8ddf-3531-4ef1-a8f7-31afc142660d",
+    subscribeKey: "sub-c-7d2e88ac-4359-11ea-833a-9e82b35d3d47",
+    uuid: uuid
+});
+
+pubnub.subscribe({
+    channels: ['vr_position_channel'],
+    withPresence: true
+});
 
 
+pubnub.addListener({
+    message: function(event) {
 
-var camera = document.getElementById('camera');
+	  console.log(JSON.stringify(event));
+	  
+	  var id = event.message.sender;
+	  var attr = event.message.content;
+
+	  if(id == uuid)
+	  {
+		  console.log("it's my position ");
+		  return;
+	  }
+
+      //Set Position of Avatar / Create if not exits
+	  console.log("set position");
+
+	  if(!(id in avatars))
+	  {
+		console.log("Create Avatar "+id)
+		var myBoxColor = '#aaa'
+		createAvatar(id,{
+			type: 'a-box',
+			attr: {
+				position: {x: 0, y: 1, z: 0},
+				rotation: "0 0 0",
+				color: myBoxColor,
+				id: id,
+				depth: "1",
+				height: "1",
+				width: "1"
+			}
+		});
+		
+	  }
+
+	  updateAvatar(id,{ position: attr.position, rotation: attr.rotation });
+
+
+    },
+    presence: function(event) {
+	  console.log(event.uuid + " has joined.");
+	  last_attr = "";
+    }
+  });
+
+//update 
+var camera = document.getElementById('head');
     
-   //update camera position 
-function update() {
+//update camera position 
+function updateCameraPosition() {
      var latestPosition = camera.getAttribute('position');
 	 var latestRotation = camera.getAttribute('rotation');
 	 
 	
-     var attr = {
+    var attr = {
          position: latestPosition,
          rotation: latestRotation
-	   };
-	   console.log("position",attr.position);
-	   console.log("rotation",attr.rotation);
-	setInterval(update, 5000);
-
 	};
 
-	update();
+	if(JSON.stringify(attr) != last_attr)
+	{
+	   last_attr = JSON.stringify(attr);
+	   console.log("Changed position "+ JSON.stringify(attr) );
+
+	   pubnub.publish({
+		channel : "vr_position_channel",
+		message : {"sender": uuid, "content": attr}
+	   }, function(status, response) {
+		//Handle error here
+	   });
+
+	}
+	
+	setTimeout(updateCameraPosition, 100);
+
+};
+
+updateCameraPosition();
+
+

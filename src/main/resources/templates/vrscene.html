@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/aframe-teleport-controls@0.3.1/dist/aframe-teleport-controls.min.js"></script>
     <script src="https://unpkg.com/aframe-controller-cursor-component@0.2.7/dist/aframe-controller-cursor-component.min.js"></script>
     <script src="https://rawgit.com/ngokevin/aframe-motion-capture/343f99/dist/aframe-motion-capture.min.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script>
   
 
   </head>
@@ -27,7 +28,7 @@
       <a-sky src="#skyTexture"></a-sky>
       <a-plane id="ground" src="#groundTexture" rotation="-90 0 0" width="100" height="100" repeat="20 20"></a-plane> 
 
-      <a-entity id="cameraRig">
+      <a-entity id="cameraRig" position="0 1 0">
        <!-- Camera. -->
           <a-entity id="head" camera wasd-controls look-controls></a-entity>
 	      
