@@ -1,4 +1,4 @@
-package de.db.stk.vorlagen.maven_docker_spring_boot;
+package de.frittenburger.vr;
 
 
 public class YourWhateverTest {
