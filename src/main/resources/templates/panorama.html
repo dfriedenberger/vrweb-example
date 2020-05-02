@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>360 grad</title>
+    <meta name="description" content="Basic Scene with Environment - A-Frame">
+    <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <!-- Try changing the preset to one of default, contact, egypt, checkerboard, forest, goaland, yavapai, goldmine, 
+         threetowers, poison, arches, tron, japan, dream, volcano, starry, osiris. -->
+    <!-- See more environment options: https://github.com/feiss/aframe-environment-component#parameters -->
+   
+        <a-scene>
+          <a-assets>
+            <audio id="birds" src="../media/wav/birds.wav" preload="auto"></audio>
+          </a-assets>
+          <a-sky src="../media/360/mountain-3531360_1920.jpg" rotation="0 -130 0"></a-sky>
+          <a-entity sound="src: #birds; autoplay: true;volume: 1" ></a-entity>
+
+        </a-scene>
+        
+      
+  </body>
+</html>
