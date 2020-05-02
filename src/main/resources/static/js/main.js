@@ -207,16 +207,21 @@ pubnub.addListener({
 
 //update 
 var camera = document.getElementById('head');
-    
+var container = document.getElementById('cameraRig');
+
 //update camera position 
 function updateCameraPosition() {
      var latestPosition = camera.getAttribute('position');
 	 var latestRotation = camera.getAttribute('rotation');
 	 
-	
+	 var containerPosition = container.getAttribute('position');
+	 var containerRotation = container.getAttribute('rotation');
+
     var attr = {
          position: latestPosition,
-         rotation: latestRotation
+		 rotation: latestRotation,
+		 containerPosition: containerPosition,
+		 containerRotation: containerRotation
 	};
 
 	if(JSON.stringify(attr) != last_attr)
