@@ -1,6 +1,8 @@
 
 
 var avatars = [];
+var avatars_heartbeat = [];
+
 var last_attr = "";
 
 //add Avatar when user enters the app
@@ -103,6 +105,11 @@ function updateAvatar(id, attr) {
     avatar.setAttribute('rotation', rotation);
   }
 
+//remove Avatar when user quits the app
+function removeAvatar(id){
+	var scene = document.getElementById('scene');
+	scene.removeChild(avatars[id]);
+ }
 
 
 /*
@@ -121,7 +128,7 @@ const uuid = PubNub.generateUUID();
 const pubnub = new PubNub({
     publishKey: "pub-c-f3ce8ddf-3531-4ef1-a8f7-31afc142660d",
     subscribeKey: "sub-c-7d2e88ac-4359-11ea-833a-9e82b35d3d47",
-    uuid: uuid
+	uuid: uuid
 });
 
 pubnub.subscribe({
@@ -137,42 +144,64 @@ pubnub.addListener({
 	  
 	  var id = event.message.sender;
 	  var attr = event.message.content;
+	  var now = Date.now();
 
-	  if(id == uuid)
+	  if(id != uuid)
 	  {
-		  console.log("it's my position ");
-		  return;
-	  }
+		 
+		//Set Position of Avatar / Create if not exits
+		console.log("set position");
+		avatars_heartbeat[id] = now;
 
-      //Set Position of Avatar / Create if not exits
-	  console.log("set position");
+		if(!(id in avatars))
+		{
+			console.log("Create Avatar "+id)
+			var myBoxColor = '#aaa'
+			createAvatar(id,{
+				type: 'a-box',
+				attr: {
+					position: {x: 0, y: 1, z: 0},
+					rotation: "0 0 0",
+					color: myBoxColor,
+					id: id,
+					depth: "1",
+					height: "1",
+					width: "1"
+				}
+			});
+		}
 
-	  if(!(id in avatars))
-	  {
-		console.log("Create Avatar "+id)
-		var myBoxColor = '#aaa'
-		createAvatar(id,{
-			type: 'a-box',
-			attr: {
-				position: {x: 0, y: 1, z: 0},
-				rotation: "0 0 0",
-				color: myBoxColor,
-				id: id,
-				depth: "1",
-				height: "1",
-				width: "1"
+		updateAvatar(id,{ position: attr.position, rotation: attr.rotation });
+	}
+	  //delete
+	  avatars_heartbeat
+	  for (var aid in avatars_heartbeat){
+		if (avatars_heartbeat.hasOwnProperty(aid)) {
+			
+             var timeout = now - avatars_heartbeat[aid];
+			console.log(aid+" => "+timeout,now,avatars_heartbeat[aid]);
+
+			if(timeout > 3000)
+			{
+				removeAvatar(aid);
+				delete avatars_heartbeat[aid];
 			}
-		});
-		
+		}
 	  }
-
-	  updateAvatar(id,{ position: attr.position, rotation: attr.rotation });
-
 
     },
     presence: function(event) {
-	  console.log(event.uuid + " has joined.");
-	  last_attr = "";
+	
+	  console.log(JSON.stringify(event));
+	  if(event.action =="join")
+	  {
+		console.log(event.uuid + " has joined.");
+		last_attr = "";
+	  }
+	  if(event.action == "timeout")
+	  {
+		console.log(event.uuid + " leave.");
+	  }
     }
   });
 
@@ -194,17 +223,17 @@ function updateCameraPosition() {
 	{
 	   last_attr = JSON.stringify(attr);
 	   console.log("Changed position "+ JSON.stringify(attr) );
+	}
 
-	   pubnub.publish({
+	pubnub.publish({
 		channel : "vr_position_channel",
 		message : {"sender": uuid, "content": attr}
-	   }, function(status, response) {
-		//Handle error here
-	   });
-
-	}
+	}, function(status, response) {
+	//Handle error here
+	});
 	
-	setTimeout(updateCameraPosition, 100);
+	
+	setTimeout(updateCameraPosition, 500);
 
 };
 
