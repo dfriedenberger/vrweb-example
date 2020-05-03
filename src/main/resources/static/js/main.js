@@ -253,3 +253,12 @@ function updateCameraPosition() {
 updateCameraPosition();
 
 
+var parrot = document.getElementById('parrot');
+var position= parrot.getAttribute('position');
+//update camera position 
+function updatePosition() {
+
+position.x+= 0.1;
+setTimeout(updatePosition, 100);
+}
+updatePosition();
