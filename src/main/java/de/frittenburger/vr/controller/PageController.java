@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -51,10 +52,11 @@ public class PageController {
 	}
 	
 	@RequestMapping("/objmodel/{id}")
-	public String objmodel(@PathVariable("id") String id, HttpServletRequest request) {
+	public String objmodel(@PathVariable("id") String id, @RequestParam(defaultValue="0 0 0") String position,Map<String, Object> model,HttpServletRequest request) {
 		
-	 
-	    
+		model.put("model", id);
+		model.put("position", position);
+
 		return "objmodel";
 	}
 	
