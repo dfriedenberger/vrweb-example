@@ -50,6 +50,14 @@ public class PageController {
 		return "panorama";
 	}
 	
+	@RequestMapping("/objmodel/{id}")
+	public String objmodel(@PathVariable("id") String id, HttpServletRequest request) {
+		
+	 
+	    
+		return "objmodel";
+	}
+	
 	
 	
 	
