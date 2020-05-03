@@ -28,9 +28,9 @@
       <a-sky src="#skyTexture"></a-sky>
       <a-plane id="ground" src="#groundTexture" rotation="-90 0 0" width="100" height="100" repeat="20 20"></a-plane> 
 
-      <a-entity id="cameraRig" position="0 1 0">
-       <!-- Camera. -->
-          <a-entity id="head" camera wasd-controls look-controls></a-entity>
+      <a-entity id="cameraRig" position="0 0 0">
+          <!-- Camera. -->
+          <a-entity position="0 1 0" id="head" camera wasd-controls look-controls></a-entity>
 	      
 	      <!-- Hands. -->
 	      <a-entity hand-controls="left" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; type: parabolic; button: trigger;" ></a-entity>
