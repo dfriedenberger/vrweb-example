@@ -218,13 +218,15 @@ function updateCameraPosition() {
 	 var containerRotation = container.getAttribute('rotation');
 
 
-	 latestPosition.x += containerPosition.x;
-	 latestPosition.y += containerPosition.y;
-	 latestPosition.z += containerPosition.z;
+	 var position = Object.assign({}, latestPosition);
+
+	 position.x += containerPosition.x;
+	 position.y += containerPosition.y;
+	 position.z += containerPosition.z;
 
 
     var attr = {
-         position: latestPosition,
+         position: position,
 		 rotation: latestRotation,
 		 containerPosition: containerPosition,
 		 containerRotation: containerRotation
