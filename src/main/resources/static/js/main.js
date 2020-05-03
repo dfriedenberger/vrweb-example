@@ -160,7 +160,7 @@ pubnub.addListener({
 			createAvatar(id,{
 				type: 'a-box',
 				attr: {
-					position: {x: 0, y: 1, z: 0},
+					position: {x: 0, y: 0, z: 0},
 					rotation: "0 0 0",
 					color: myBoxColor,
 					id: id,
