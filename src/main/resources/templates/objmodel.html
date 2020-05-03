@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="/js/play-all-model-animations.js"></script>
     <script>
     
     document.addEventListener("keydown", keyDownTextField, false);
@@ -30,7 +31,7 @@
       <a-assets>
         <a-asset-item id="model" th:src="@{|https://friedenberger-test.s3.eu-central-1.amazonaws.com/${model}/scene.gltf|}"></a-asset-item>
       </a-assets>
-      <a-entity th:position="${position}" th:scale="${scale}" gltf-model="#model"></a-entity>
+      <a-entity th:position="${position}" th:scale="${scale}" gltf-model="#model" play-all-model-animations></a-entity>
       <a-camera id="camera"></a-camera>
     </a-scene>
   </body>
