@@ -30,8 +30,8 @@
       <a-assets>
         <a-asset-item id="model" th:src="@{|https://friedenberger-test.s3.eu-central-1.amazonaws.com/${model}/scene.gltf|}"></a-asset-item>
       </a-assets>
-      <a-entity gltf-model="#model"></a-entity>
-      <a-camera id="camera" th:position="${position}"></a-camera>
+      <a-entity th:position="${position}" th:scale="${scale}" gltf-model="#model"></a-entity>
+      <a-camera id="camera"></a-camera>
     </a-scene>
   </body>
 </html>

@@ -52,10 +52,14 @@ public class PageController {
 	}
 	
 	@RequestMapping("/objmodel/{id}")
-	public String objmodel(@PathVariable("id") String id, @RequestParam(defaultValue="0 0 0") String position,Map<String, Object> model,HttpServletRequest request) {
+	public String objmodel(@PathVariable("id") String id, 
+			@RequestParam(defaultValue="0 0 0") String position,
+			@RequestParam(defaultValue="1 1 1") String scale,
+			Map<String, Object> model,HttpServletRequest request) {
 		
 		model.put("model", id);
 		model.put("position", position);
+		model.put("scale", scale);
 
 		return "objmodel";
 	}
